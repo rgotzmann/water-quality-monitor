@@ -34,6 +34,7 @@ class SensorReading(BaseModel):
     conductivity:     Optional[float] = None
 
 class PredictionResponse(BaseModel):
+    model_config =  {"protected_namespaces": ()}
     sensor_id:      str
     timestamp:      str
     model_version:  str
