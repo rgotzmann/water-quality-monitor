@@ -1,0 +1,19 @@
+name: WaterRich Probe
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install requests numpy confluent-kafka
+      - run: python scripts/probe.py
+        env:
+          API_URL: https://water-quality-monitor-swmo.onrender.com
+          N_PROBES: "10"
