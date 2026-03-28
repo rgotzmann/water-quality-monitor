@@ -41,7 +41,6 @@ Kafka Topic: water.quality.alerts ->
 | Turbidity          | < 1 NTU (drinking) | Cloudiness — indicates runoff/sediment|
 | Temperature        | Varies by season   | Affects oxygen levels & aquatic life  |
 | Conductivity / TDS | < 500 µS/cm        | Detects salt or chemical pollution    |
-| Nitrates           | < 10 mg/L          | Agricultural runoff indicator         |
 
 ---
 
