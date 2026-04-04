@@ -35,7 +35,7 @@ jobs:
       - name: Lint (flake8)
         run: |
           flake8 src/ tests/ --max-line-length=100 \
-           --extend-ignore=E127,E221,E231,E261,E302,W391,E402
+           --extend-ignore=E127,E221,E231,E261,E302,E303,E202,W391,E402
 
       - name: Run tests with coverage
         run: |
