@@ -23,6 +23,21 @@ app = FastAPI(
     version="1.0.0",
 )
 
+@app.get("/")
+def root():
+    return {
+        "project":     "WaterRich — Real-Time Water Quality Monitor",
+        "team":        "WaterRich",
+        "status":      "live",
+        "model":       MODEL_VERSION,
+        "endpoints": {
+            "health":  "/health",
+            "predict": "POST /predict",
+            "alerts":  "/alerts/active",
+            "docs":    "/docs",
+        }
+    }
+
 # schemas
 class SensorReading(BaseModel):
     sensor_id:        str
