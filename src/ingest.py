@@ -4,7 +4,7 @@ Reads from WaterRich.readings.raw, validates with pandera, buffers to parquet.
 """
 import json
 import os
-import time
+
 import pandas as pd
 import pandera.pandas as pa
 from pandera.pandas import Column, DataFrameSchema, Check

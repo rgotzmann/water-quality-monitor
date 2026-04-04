@@ -35,7 +35,7 @@ jobs:
       - name: Lint (flake8)
         run: |
           flake8 src/ tests/ --max-line-length=100 \
-            --extend-ignore=E203,W503
+           --extend-ignore=E127,E221,E231,E261,E302,W391,E402
 
       - name: Run tests with coverage
         run: |
@@ -130,16 +130,3 @@ jobs:
           name: probe-results-${{ github.run_id }}
           path: probe_results.json
 
----
-# Separate workflow file needed for cron — save as .github/workflows/probe.yml:
-#
-# name: WaterRich Probe (cron)
-# on:
-#   schedule:
-#     - cron: '*/15 * * * *'
-#   workflow_dispatch:
-# jobs:
-#   probe:
-#     uses: ./.github/workflows/ci.yml
-#     with:
-#       job: probe

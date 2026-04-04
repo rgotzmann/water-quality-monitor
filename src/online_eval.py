@@ -15,11 +15,11 @@ KPIs computed:
   5. Throughput                   — messages per minute in observation window
 """
 import json
-import os
+
 import pandas as pd
 import numpy as np
 from confluent_kafka import Consumer
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 CONFIRMATION_WINDOW_MIN = 30   # minutes
 
@@ -101,7 +101,7 @@ def compute_kpis(df: pd.DataFrame) -> dict:
     # For each alert, check if same sensor has another alert within 30 min
     acr = None
     if alert_col and "sensor_id" in df.columns and not df["ts"].isna().all():
-        alerts_df = df[df[alert_col] == True].copy()
+        alerts_df = df[df[alert_col] ].copy()
         if len(alerts_df) > 0:
             confirmed = 0
             for _, row in alerts_df.iterrows():
@@ -110,7 +110,7 @@ def compute_kpis(df: pd.DataFrame) -> dict:
                     (df["sensor_id"] == row.get("sensor_id")) &
                     (df["ts"] > row["ts"]) &
                     (df["ts"] <= window_end) &
-                    (df.get(alert_col, False) == True)
+                    (df.get(alert_col, False) )
                 ]
                 if len(follow_ups) > 0:
                     confirmed += 1
