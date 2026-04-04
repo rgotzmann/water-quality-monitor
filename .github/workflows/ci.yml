@@ -96,10 +96,15 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Trigger Render deploy hook
+      - name: Trigger Render deploy
         run: |
-          curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" \
-            -o /dev/null -w "HTTP %{http_code}\n"
+          curl -s -X POST \
+            "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{}' \
+            -w "HTTP %{http_code}\n"
+
 
   # ── 4. Probe (runs every 15 min via separate schedule trigger) ───────────────
   probe:
