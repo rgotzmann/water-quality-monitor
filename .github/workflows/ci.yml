@@ -1,4 +1,4 @@
-iname: WaterRich CI/CD
+name: WaterRich CI/CD
 
 on:
   push:
