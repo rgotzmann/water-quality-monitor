@@ -1,0 +1,145 @@
+iname: WaterRich CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY:   ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/waterrich-api
+
+jobs:
+  # ── 1. Lint + Test + Coverage ───────────────────────────────────────────────
+  test:
+    name: Lint · Test · Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install flake8 pytest pytest-cov pandera scikit-learn \
+                      pandas numpy joblib confluent-kafka fastapi \
+                      uvicorn pyarrow
+
+      - name: Lint (flake8)
+        run: |
+          flake8 src/ tests/ --max-line-length=100 \
+            --extend-ignore=E203,W503
+
+      - name: Run tests with coverage
+        run: |
+          pytest tests/ -v \
+            --cov=src \
+            --cov-report=term-missing \
+            --cov-fail-under=70
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: .coverage
+
+  # ── 2. Build & Push Docker image ────────────────────────────────────────────
+  build:
+    name: Build & Push Image
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=sha-
+            type=raw,value=latest
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  # ── 3. Deploy to Render ─────────────────────────────────────────────────────
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Trigger Render deploy hook
+        run: |
+          curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" \
+            -o /dev/null -w "HTTP %{http_code}\n"
+
+  # ── 4. Probe (runs every 15 min via separate schedule trigger) ───────────────
+  probe:
+    name: API Probe
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install probe dependencies
+        run: pip install requests numpy confluent-kafka
+
+      - name: Run probe
+        env:
+          API_URL:   ${{ secrets.API_URL }}
+          N_PROBES:  "10"
+        run: python scripts/probe.py
+
+      - name: Upload probe results
+        uses: actions/upload-artifact@v4
+        with:
+          name: probe-results-${{ github.run_id }}
+          path: probe_results.json
+
+---
+# Separate workflow file needed for cron — save as .github/workflows/probe.yml:
+#
+# name: WaterRich Probe (cron)
+# on:
+#   schedule:
+#     - cron: '*/15 * * * *'
+#   workflow_dispatch:
+# jobs:
+#   probe:
+#     uses: ./.github/workflows/ci.yml
+#     with:
+#       job: probe
