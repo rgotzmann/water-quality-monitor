@@ -247,7 +247,6 @@ class TestTrain:
                                   str(tmp_path))
         assert os.path.exists(f"{tmp_path}/isolation_forest_v1.pkl")
         assert os.path.exists(f"{tmp_path}/isolation_forest_v1_metadata.json")
-        import math
         roc = meta["roc_auc"]
         assert roc is None or isinstance(roc, float)
 

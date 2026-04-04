@@ -5,9 +5,6 @@ Uses Population Stability Index (PSI) per feature.
 import numpy as np
 import pandas as pd
 import json
-
-
-
 FEATURE_COLS = ["pH", "dissolved_oxygen", "turbidity", "temperature", "conductivity"]
 PSI_THRESHOLD = 0.2   # PSI > 0.2 = significant drift
 N_BINS        = 10
