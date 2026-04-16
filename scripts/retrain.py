@@ -203,7 +203,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--major", action="store_true",
                         help="Bump major version instead of minor")
-   parser.add_argument("--skip-if-no-data", action="store_true")
+    parser.add_argument("--skip-if-no-data", action="store_true")
     args = parser.parse_args()
 
     if args.skip_if_no_data:
