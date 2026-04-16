@@ -136,10 +136,9 @@ jobs:
           if [ -f "data/usgs_water_quality.csv" ]; then
             python scripts/retrain.py
           else
-            echo "No CSV found — retraining from existing snapshots or skipping"
-            python scripts/retrain.py --skip-if-no-data || echo "Retrain skipped"
+            DATA_CSV=data/sample.csv python scripts/retrain.py
           fi
-
+          
       - name: Commit new model version
         run: |
           git config user.name  "github-actions[bot]"
