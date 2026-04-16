@@ -27,17 +27,12 @@ DATA_SNAPSHOT   = os.getenv("DATA_SNAPSHOT_ID", "snapshots/readings/year=2026")
 _models = {}
 _model_lock = threading.Lock()
 
-
 def load_model(version: str):
-    import glob
-    all_pkls = glob.glob(f"{REGISTRY_DIR}/**/*.pkl", recursive=True)
-    print(f"[debug] Searching for version: {version}")
-    print(f"[debug] Available pkls: {all_pkls}")
     paths = [
         f"{REGISTRY_DIR}/{version}.pkl",
+        f"{REGISTRY_DIR}/v{version.split('v')[-1]}/{version}.pkl",
         f"{REGISTRY_DIR}/{version}/{version}.pkl",
     ]
-    print(f"[debug] Trying paths: {paths}")
     for path in paths:
         if os.path.exists(path):
             return joblib.load(path)
