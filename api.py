@@ -29,11 +29,14 @@ _model_lock = threading.Lock()
 
 
 def load_model(version: str):
-    path = f"{REGISTRY_DIR}/{version}.pkl"
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"Model not found: {path}")
-    return joblib.load(path)
-
+    paths = [
+        f"{REGISTRY_DIR}/{version}.pkl",
+        f"{REGISTRY_DIR}/{version}/{version}.pkl",
+    ]
+    for path in paths:
+        if os.path.exists(path):
+            return joblib.load(path)
+    raise FileNotFoundError(f"Model not found: {version}")
 
 def get_model(version: str):
     with _model_lock:
