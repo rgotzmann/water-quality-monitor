@@ -120,7 +120,7 @@ jobs:
     name: Scheduled Retrain
     runs-on: ubuntu-latest
     permissions:
-      content: write
+      contents: write
     if: github.event_name == 'schedule' || inputs.stage == 'retrain' || inputs.stage == 'all'
 
     steps:
