@@ -151,6 +151,11 @@ def health():
         "timestamp":    datetime.now(timezone.utc).isoformat(),
     }
 
+@app.get("/debug/models")
+def debug_models():
+    import glob
+    files = glob.glob(f"{REGISTRY_DIR}/**/*.pkl", recursive=True)
+    return {"pkl_files": files, "registry_dir": REGISTRY_DIR}
 
 @app.get("/metrics")
 def metrics():
