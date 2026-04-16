@@ -203,5 +203,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--major", action="store_true",
                         help="Bump major version instead of minor")
+   parser.add_argument("--skip-if-no-data", action="store_true")
     args = parser.parse_args()
-    main(bump_major=args.major)
+
+    if args.skip_if_no_data:
+        files = glob.glob(SNAPSHOT_GLOB, recursive=True)
+        if not files and not os.path.exists(DATA_CSV):
+            print("[retrain] No data available — skipping.")
+            sys.exit(0)
+
+    main(bump_major=args.major) 

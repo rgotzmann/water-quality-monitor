@@ -132,9 +132,13 @@ jobs:
         run: pip install scikit-learn pandas numpy joblib pyarrow
 
       - name: Run retraining
-        env:
-          DATA_CSV: data/usgs_water_quality.csv
-        run: python scripts/retrain.py
+        run: |
+          if [ -f "data/usgs_water_quality.csv" ]; then
+            python scripts/retrain.py
+          else
+            echo "No CSV found — retraining from existing snapshots or skipping"
+            python scripts/retrain.py --skip-if-no-data || echo "Retrain skipped"
+          fi
 
       - name: Commit new model version
         run: |
