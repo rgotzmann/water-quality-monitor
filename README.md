@@ -1,6 +1,6 @@
 # water-quality-monitor
 
-# 💧 Real-Time Water Quality Monitor
+# Real-Time Water Quality Monitor
 
 A real-time water quality monitoring system using Apache Kafka and machine learning to detect anomalies in local waterway sensor data.
 
