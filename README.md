@@ -1,6 +1,5 @@
 # WaterRich — Real-Time Water Quality Monitor
 
-A real-time water quality monitoring system using Apache Kafka and machine learning to detect anomalies in Florida waterway sensor data. Streams USGS historical readings through a Kafka pipeline, applies ML anomaly detection, and surfaces alerts within seconds of a sensor reading crossing a threshold.
 =======
 # Real-Time Water Quality Monitor
 
