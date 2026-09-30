@@ -1,0 +1,19 @@
+{
+  "model_name": "lof_v1.67",
+  "version": "v1.67",
+  "trained_at": "2026-06-17T07:20:12.445663Z",
+  "git_sha": "c7d4fb1",
+  "training_rows": 24,
+  "feature_cols": [
+    "pH",
+    "dissolved_oxygen",
+    "turbidity",
+    "temperature",
+    "conductivity"
+  ],
+  "contamination": 0.05,
+  "roc_auc": 0.7778,
+  "pr_auc": 0.6944,
+  "train_time_s": 0.19,
+  "size_mb": 0.01
+}

@@ -1,0 +1,19 @@
+{
+  "model_name": "isolation_forest_v1.41",
+  "version": "v1.41",
+  "trained_at": "2026-05-22T06:15:07.695335Z",
+  "git_sha": "7bf1275",
+  "training_rows": 24,
+  "feature_cols": [
+    "pH",
+    "dissolved_oxygen",
+    "turbidity",
+    "temperature",
+    "conductivity"
+  ],
+  "contamination": 0.05,
+  "roc_auc": 0.7778,
+  "pr_auc": 0.8056,
+  "train_time_s": 0.12,
+  "size_mb": 0.26
+}
