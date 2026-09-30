@@ -1,6 +1,5 @@
 # WaterRich — Real-Time Water Quality Monitor
 
-# Real-Time Water Quality Monitor
 
 **Live API:** https://water-quality-monitor-swmo.onrender.com  
 **Repo:** https://github.com/rgotzmann/water-quality-monitor
