@@ -38,21 +38,25 @@ Alert System / Dashboard
 | pH               | 5.5 – 9.5           | Acidity — fish die outside this range  |
 | Dissolved Oxygen | > 3.0 mg/L          | Low = dead zones, pollution            |
 | Turbidity        | < 1 NTU (drinking)  | Cloudiness — indicates runoff/sediment |
-| Temperature      | Varies by season    | Affects oxygen levels & aquatic life   |
+| Temperature      | Seasonal variance   | Affects oxygen levels & aquatic life   |
 | Conductivity     | < 500 µS/cm         | Detects salt or chemical pollution     |
 
 ---
 
 ## ML Models
 
-Two unsupervised anomaly detection models are trained on historical USGS readings using a chronological split (no temporal leakage):
+Due to lack of labeling, two unsupervised anomaly detection models are trained on historical USGS readings using a chronological split (no temporal leakage):
 
 | Model                | ROC-AUC | PR-AUC | Latency p50 | Size    | Role                  |
 |----------------------|---------|--------|-------------|---------|-----------------------|
 | Isolation Forest     | 0.7242  | 0.3685 | 1.36 ms     | 0.97 MB | Primary (A/B Group A) |
 | Local Outlier Factor | 0.4735  | 0.1430 | 16.70 ms    | 0.28 MB | Challenger (A/B Group B) |
 
-Isolation Forest is the deployed model. A/B traffic is split deterministically by `sensor_id` hash. Results are written to `WaterRich.reco_responses` and analysed via `scripts/ab_analysis.py`.
+Isolation Forest is the deployed model. It randomly partitions the feature space and counts how many splits are necessary to isolate a point. Feature value anomalies are isolated relatively quickly because they are "isolated" from the dense cluster of the most frequent ("normal") values. It is a common model for tabular anomaly detection. 
+
+Local Outlier Factor (LOF) is the A/B challenger because of the type of anomaly it detects. Isolation Forest uses global density but LOF compares each point to its local neighborhood which identifies local rather than global outliers. Sensor readings in geographically distinct waterways often have different baselines, which positions this model as an effective check of local density comparison.    
+
+A/B traffic is split deterministically by `sensor_id` hash. Results are written to `WaterRich.reco_responses` and analysed via `scripts/ab_analysis.py`.
 
 ```python
 from sklearn.ensemble import IsolationForest
