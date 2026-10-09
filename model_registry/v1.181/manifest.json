@@ -1,0 +1,45 @@
+{
+  "version": "v1.181",
+  "trained_at": "2026-10-09T08:48:18.628766Z",
+  "git_sha": "3bcd3d7",
+  "models": {
+    "isolation_forest": {
+      "model_name": "isolation_forest_v1.181",
+      "version": "v1.181",
+      "trained_at": "2026-10-09T08:48:18.628766Z",
+      "git_sha": "3bcd3d7",
+      "training_rows": 24,
+      "feature_cols": [
+        "pH",
+        "dissolved_oxygen",
+        "turbidity",
+        "temperature",
+        "conductivity"
+      ],
+      "contamination": 0.05,
+      "roc_auc": 0.7778,
+      "pr_auc": 0.8056,
+      "train_time_s": 0.19,
+      "size_mb": 0.26
+    },
+    "lof": {
+      "model_name": "lof_v1.181",
+      "version": "v1.181",
+      "trained_at": "2026-10-09T08:48:18.628766Z",
+      "git_sha": "3bcd3d7",
+      "training_rows": 24,
+      "feature_cols": [
+        "pH",
+        "dissolved_oxygen",
+        "turbidity",
+        "temperature",
+        "conductivity"
+      ],
+      "contamination": 0.05,
+      "roc_auc": 0.7778,
+      "pr_auc": 0.6944,
+      "train_time_s": 0.02,
+      "size_mb": 0.01
+    }
+  }
+}
